@@ -13,7 +13,9 @@ import javax.xml.transform.TransformerException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import co.com.carpco.footballstats.bo.TeamBO;
 import co.com.carpco.footballstats.bo.TournamentBO;
+import co.com.carpco.footballstats.entity.Team;
 import co.com.carpco.footballstats.entity.Tournament;
 import co.com.carpco.footballstats.response.TournamentResponse;
 import co.com.carpco.footballstats.spring.ServiceLocator;
@@ -26,6 +28,8 @@ public class TournamentRequestHandler {
 
   @Autowired
   private TournamentBO tournamentBO = ServiceLocator.getBean(TournamentBO.class);
+  
+  private TeamBO teamBO = ServiceLocator.getBean(TeamBO.class);
 
   @GET
   @Path("all")
@@ -33,6 +37,13 @@ public class TournamentRequestHandler {
   public String findTournaments() {
     
     Set<Tournament> tournamentSet = tournamentBO.findAll();
+    
+    for (Tournament tournament : tournamentSet) {
+      Set<Team> teamSet = teamBO.findByTournament(tournament.getIdTournament());
+      tournamentSet.remove(tournament);
+      tournament.setTeamSet(teamSet);
+      tournamentSet.add(tournament);
+    }
     
     TournamentResponse response = new TournamentResponse();
     String responseStr = null;

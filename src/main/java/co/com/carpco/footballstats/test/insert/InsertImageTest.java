@@ -13,8 +13,12 @@ import org.joda.time.DateTime;
 
 import co.com.carpco.footballstats.bo.CountryBO;
 import co.com.carpco.footballstats.bo.TeamBO;
+import co.com.carpco.footballstats.bo.TournamentBO;
+import co.com.carpco.footballstats.bo.TournamentTypeBO;
 import co.com.carpco.footballstats.entity.Country;
 import co.com.carpco.footballstats.entity.Team;
+import co.com.carpco.footballstats.entity.Tournament;
+import co.com.carpco.footballstats.entity.TournamentType;
 import co.com.carpco.footballstats.spring.ServiceLocator;
 
 /**
@@ -30,6 +34,29 @@ public class InsertImageTest {
     InsertImageTest imageTest = new InsertImageTest();
     imageTest.insertCountry();
     imageTest.insertTeam();
+    imageTest.insertTournament();
+  }
+  
+  private void insertTournament() {
+    TournamentBO tournamentBO = ServiceLocator.getBean(TournamentBO.class);
+    CountryBO countryBO = ServiceLocator.getBean(CountryBO.class);
+    TournamentTypeBO typeBO = ServiceLocator.getBean(TournamentTypeBO.class);
+
+    BufferedImage imBuff = null;
+    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/wc_brazil.png");
+
+    try {
+      imBuff = ImageIO.read(is);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    if (imBuff != null) {
+      Country country = countryBO.findByIdentifier(4);
+      TournamentType tournamentType = typeBO.findByIdentifier(1); 
+      Tournament tournament = new Tournament("world_cup_brazil_2014", 1930, imBuff, country, tournamentType);
+      tournamentBO.insertRecord(tournament);
+    }
   }
 
   private void insertCountry() {

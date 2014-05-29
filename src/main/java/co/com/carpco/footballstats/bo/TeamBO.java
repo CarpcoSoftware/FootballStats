@@ -56,5 +56,14 @@ public class TeamBO implements IBusinessObject<Team> {
     // TODO Auto-generated method stub
 
   }
+  
+  /**
+   * Selects all teams linked to tournament
+   * @param idTournament Tournament identifier
+   * @return User set
+   */
+  public Set<Team> findByTournament(int idTournament) {
+    return teamDAO.selectByTournament(idTournament);
+  }
 
 }

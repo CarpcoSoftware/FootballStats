@@ -45,8 +45,7 @@ public class TournamentBO implements IBusinessObject<Tournament> {
    */
   @Override
   public void insertRecord(Tournament newRecord) {
-    // TODO Auto-generated method stub
-
+    tournamentDAO.insert(newRecord);
   }
 
   /* (non-Javadoc)

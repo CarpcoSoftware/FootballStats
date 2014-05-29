@@ -36,8 +36,7 @@ public class TournamentTypeBO implements IBusinessObject<TournamentType> {
    */
   @Override
   public TournamentType findByIdentifier(int identifier) {
-    // TODO Auto-generated method stub
-    return null;
+    return tournamentTypeDAO.selectByIdentifier(identifier);
   }
 
   /* (non-Javadoc)

@@ -66,7 +66,7 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
     sql.append("(name, nickname, flag, idcountry, foundation) ");
     sql.append("VALUES (?, ?, ?, ?, ?)");
 
-    Team team = (Team) newRecord;
+    Team team = newRecord;
     byte[] imageInByte = ImageUtil.encodeToByteArray((BufferedImage) team.getFlag());
 
     jdbcTemplateObject.update(sql.toString(),
@@ -80,6 +80,22 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
   public void update(Team record) {
     // TODO Auto-generated method stub
 
+  }
+  
+  /**
+   * Selects all teams linked to tournament
+   * @param idTournament Tournament identifier
+   * @return User set
+   */
+  public Set<Team> selectByTournament(int idTournament) {
+    StringBuilder sql = new StringBuilder();
+    sql.append("SELECT t.idteam, t.name, t.nickname, t.flag, t.idcountry, t.foundation ");
+    sql.append("FROM team t ");
+    sql.append("INNER JOIN tournament_team txt ON t.idteam = txt.idteam ");
+    sql.append("WHERE txt.idtournament = ? ");
+
+    Set<Team> teamSet = new HashSet<>(jdbcTemplateObject.query(sql.toString(), new Object[] {idTournament}, new TeamMapper()));
+    return teamSet;
   }
   
   private class TeamMapper implements RowMapper<Team> {

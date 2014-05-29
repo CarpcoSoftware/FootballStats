@@ -51,5 +51,15 @@ public class TeamResponse extends AbstractResponse {
     element.addContent(countryResponse.buildElement(team.getCountry()));
     return element;
   }
+  
+  public Element teamsToElement(Set<Team> teamSet) {
+    Element element = new Element("Teams");
+    
+    for (Object object : teamSet) {
+      element.addContent(buildElement(object));
+    }
+    
+    return element;
+  }
 
 }

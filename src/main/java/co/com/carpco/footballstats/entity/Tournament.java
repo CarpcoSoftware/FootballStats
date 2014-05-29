@@ -3,6 +3,7 @@
  */
 package co.com.carpco.footballstats.entity;
 
+import java.awt.Image;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,25 +21,29 @@ public class Tournament {
   
   private int foundationYear;
   
+  private Image flag;
+  
   private Country country;
   
   private TournamentType tournamentType;
   
   private Set<Team> teamSet;
   
-  public Tournament(String name, int foundationYear, Country country, TournamentType tournamentType) {
+  public Tournament(String name, int foundationYear, Image flag, Country country, TournamentType tournamentType) {
     super();
     this.name = name;
     this.foundationYear = foundationYear;
+    this.flag = flag;
     this.country = country;
     this.tournamentType = tournamentType;
   }
   
-  public Tournament(int idTournament, String name, int foundationYear, Country country, TournamentType tournamentType) {
+  public Tournament(int idTournament, String name, int foundationYear, Image flag, Country country, TournamentType tournamentType) {
     super();
     this.idTournament = idTournament;
     this.name = name;
     this.foundationYear = foundationYear;
+    this.flag = flag;
     this.country = country;
     this.tournamentType = tournamentType;
   }
@@ -83,6 +88,20 @@ public class Tournament {
    */
   public void setFoundationYear(int foundationYear) {
     this.foundationYear = foundationYear;
+  }
+
+  /**
+   * @return the flag
+   */
+  public Image getFlag() {
+    return flag;
+  }
+
+  /**
+   * @param flag the flag to set
+   */
+  public void setFlag(Image flag) {
+    this.flag = flag;
   }
 
   /**
@@ -145,6 +164,7 @@ public class Tournament {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((country == null) ? 0 : country.hashCode());
+    result = prime * result + ((flag == null) ? 0 : flag.hashCode());
     result = prime * result + foundationYear;
     result = prime * result + idTournament;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -169,6 +189,11 @@ public class Tournament {
       if (other.country != null)
         return false;
     } else if (!country.equals(other.country))
+      return false;
+    if (flag == null) {
+      if (other.flag != null)
+        return false;
+    } else if (!flag.equals(other.flag))
       return false;
     if (foundationYear != other.foundationYear)
       return false;
@@ -198,8 +223,8 @@ public class Tournament {
   @Override
   public String toString() {
     return "Tournament [idTournament=" + idTournament + ", name=" + name + ", foundationYear="
-        + foundationYear + ", country=" + country + ", tournamentType=" + tournamentType
-        + ", teamSet=" + teamSet + "]";
+        + foundationYear + ", flag=" + flag + ", country=" + country + ", tournamentType="
+        + tournamentType + ", teamSet=" + teamSet + "]";
   }
 
 }

@@ -40,7 +40,7 @@ public class CountryResponse extends AbstractResponse {
   public Element buildElement(Object object) {
     Country country = (Country) object;
     Element element = new Element("Country");
-    element.setAttribute("id", String.valueOf(country.getIdCountry()));
+    element.addContent(new Element("id").setText(String.valueOf(country.getIdCountry())));
     element.addContent(new Element("name").setText(country.getName()));
     element.addContent(new Element("flag").setText(ImageUtil.encodeToString((BufferedImage) country
         .getFlag())));
