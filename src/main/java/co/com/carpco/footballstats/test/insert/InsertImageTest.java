@@ -43,7 +43,7 @@ public class InsertImageTest {
     TournamentTypeBO typeBO = ServiceLocator.getBean(TournamentTypeBO.class);
 
     BufferedImage imBuff = null;
-    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/wc_brazil.png");
+    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/wc_trophy.png");
 
     try {
       imBuff = ImageIO.read(is);
@@ -52,9 +52,9 @@ public class InsertImageTest {
     }
 
     if (imBuff != null) {
-      Country country = countryBO.findByIdentifier(4);
+      Country country = countryBO.findByIdentifier(5);
       TournamentType tournamentType = typeBO.findByIdentifier(1); 
-      Tournament tournament = new Tournament("world_cup_brazil_2014", 1930, imBuff, country, tournamentType);
+      Tournament tournament = new Tournament("world_cup", 1930, imBuff, country, tournamentType);
       tournamentBO.insertRecord(tournament);
     }
   }
@@ -72,7 +72,7 @@ public class InsertImageTest {
     }
 
     if (imBuff != null) {
-      Country country = new Country("Brazil", imBuff, "Portuguese");
+      Country country = new Country("brazil", imBuff, "portuguese");
       countryBO.insertRecord(country);
     }
   }
@@ -82,7 +82,7 @@ public class InsertImageTest {
     CountryBO countryBO = ServiceLocator.getBean(CountryBO.class);
 
     BufferedImage imBuff = null;
-    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/brazil-cbf.png");
+    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/brazil_cbf.png");
 
     try {
       imBuff = ImageIO.read(is);
@@ -91,9 +91,9 @@ public class InsertImageTest {
     }
 
     if (imBuff != null) {
-      Country country = (Country) countryBO.findByIdentifier(4);
+      Country country = (Country) countryBO.findByIdentifier(6);
       DateTime foundation = new DateTime(1914, 6, 8, 0, 0);
-      Team team = new Team("Brazil", "Verdeamarela", imBuff, country, foundation);
+      Team team = new Team("brazil", "Canarinha", imBuff, country, foundation);
       teamBO.insertRecord(team);
     }
   }

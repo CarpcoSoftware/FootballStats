@@ -24,17 +24,20 @@ import co.com.carpco.footballstats.util.ImageUtil;
 
 /**
  * Team data object, use this to perform database operations
+ * 
  * @author Carlos Rodriguez
  * @version 1.0
  * @since 5/18/2014
  */
 @Repository
 public class TeamDAO extends AbstractDAO implements IDAO<Team> {
-  
+
   @Autowired
   private CountryDAO countryDAO;
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see co.com.carpco.footballstats.dao.IDAO#select()
    */
   @Override
@@ -47,7 +50,9 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
     return teamSet;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see co.com.carpco.footballstats.dao.IDAO#selectByIdentifier(int)
    */
   @Override
@@ -56,7 +61,9 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
     return null;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see co.com.carpco.footballstats.dao.IDAO#insert(java.lang.Object)
    */
   @Override
@@ -69,11 +76,15 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
     Team team = newRecord;
     byte[] imageInByte = ImageUtil.encodeToByteArray((BufferedImage) team.getFlag());
 
-    jdbcTemplateObject.update(sql.toString(),
-        new Object[] {team.getName(), team.getNickname(), imageInByte, team.getCountry().getIdCountry(), team.getFoundation()});
+    java.sql.Timestamp sqlDate = new java.sql.Timestamp(team.getFoundation().getMillis());
+    
+    jdbcTemplateObject.update(sql.toString(), new Object[] {team.getName(), team.getNickname(),
+        imageInByte, team.getCountry().getIdCountry(), sqlDate});
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see co.com.carpco.footballstats.dao.IDAO#update(java.lang.Object)
    */
   @Override
@@ -81,9 +92,10 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
     // TODO Auto-generated method stub
 
   }
-  
+
   /**
    * Selects all teams linked to tournament
+   * 
    * @param idTournament Tournament identifier
    * @return User set
    */
@@ -94,10 +106,12 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
     sql.append("INNER JOIN tournament_team txt ON t.idteam = txt.idteam ");
     sql.append("WHERE txt.idtournament = ? ");
 
-    Set<Team> teamSet = new HashSet<>(jdbcTemplateObject.query(sql.toString(), new Object[] {idTournament}, new TeamMapper()));
+    Set<Team> teamSet =
+        new HashSet<>(jdbcTemplateObject.query(sql.toString(), new Object[] {idTournament},
+            new TeamMapper()));
     return teamSet;
   }
-  
+
   private class TeamMapper implements RowMapper<Team> {
 
     /*
@@ -120,7 +134,7 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
       } catch (IOException e) {
         e.printStackTrace();
       }
-      
+
       Country country = countryDAO.selectByIdentifier(idCountry);
 
       return new Team(identifier, name, nickname, flag, country, foundation);
