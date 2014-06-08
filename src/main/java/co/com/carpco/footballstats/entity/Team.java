@@ -5,8 +5,6 @@ package co.com.carpco.footballstats.entity;
 
 import java.awt.Image;
 
-import org.joda.time.DateTime;
-
 /**
  * Team entity
  * @author Carlos Rodriguez
@@ -25,18 +23,24 @@ public class Team {
   
   private Country country;
   
-  private DateTime foundation;
+  private int foundation;
   
-  public Team(String name, String nickname, Image flag, Country country, DateTime foundation) {
+  private int ranking;
+  
+  private String coach;
+  
+  public Team(String name, String nickname, Image flag, Country country, int foundation, int ranking, String coach) {
     super();
     this.name = name;
     this.nickname = nickname;
     this.flag = flag;
     this.country = country;
     this.foundation = foundation;
+    this.ranking = ranking;
+    this.coach = coach;
   }
   
-  public Team(int idTeam, String name, String nickname, Image flag, Country country, DateTime foundation) {
+  public Team(int idTeam, String name, String nickname, Image flag, Country country, int foundation, int ranking, String coach) {
     super();
     this.idTeam = idTeam;
     this.name = name;
@@ -44,6 +48,8 @@ public class Team {
     this.flag = flag;
     this.country = country;
     this.foundation = foundation;
+    this.ranking = ranking;
+    this.coach = coach;
   }
 
   /**
@@ -119,15 +125,43 @@ public class Team {
   /**
    * @return the foundation
    */
-  public DateTime getFoundation() {
+  public int getFoundation() {
     return foundation;
   }
 
   /**
    * @param foundation the foundation to set
    */
-  public void setFoundation(DateTime foundation) {
+  public void setFoundation(int foundation) {
     this.foundation = foundation;
+  }
+
+  /**
+   * @return the ranking
+   */
+  public int getRanking() {
+    return ranking;
+  }
+
+  /**
+   * @param ranking the ranking to set
+   */
+  public void setRanking(int ranking) {
+    this.ranking = ranking;
+  }
+
+  /**
+   * @return the coach
+   */
+  public String getCoach() {
+    return coach;
+  }
+
+  /**
+   * @param coach the coach to set
+   */
+  public void setCoach(String coach) {
+    this.coach = coach;
   }
 
   /* (non-Javadoc)
@@ -137,11 +171,14 @@ public class Team {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((coach == null) ? 0 : coach.hashCode());
     result = prime * result + ((country == null) ? 0 : country.hashCode());
     result = prime * result + ((flag == null) ? 0 : flag.hashCode());
+    result = prime * result + foundation;
     result = prime * result + idTeam;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result = prime * result + ((nickname == null) ? 0 : nickname.hashCode());
+    result = prime * result + ranking;
     return result;
   }
 
@@ -157,6 +194,11 @@ public class Team {
     if (!(obj instanceof Team))
       return false;
     Team other = (Team) obj;
+    if (coach == null) {
+      if (other.coach != null)
+        return false;
+    } else if (!coach.equals(other.coach))
+      return false;
     if (country == null) {
       if (other.country != null)
         return false;
@@ -166,6 +208,8 @@ public class Team {
       if (other.flag != null)
         return false;
     } else if (!flag.equals(other.flag))
+      return false;
+    if (foundation != other.foundation)
       return false;
     if (idTeam != other.idTeam)
       return false;
@@ -179,6 +223,8 @@ public class Team {
         return false;
     } else if (!nickname.equals(other.nickname))
       return false;
+    if (ranking != other.ranking)
+      return false;
     return true;
   }
 
@@ -188,6 +234,7 @@ public class Team {
   @Override
   public String toString() {
     return "Team [idTeam=" + idTeam + ", name=" + name + ", nickname=" + nickname + ", flag="
-        + flag + ", country=" + country + "]";
+        + flag + ", country=" + country + ", foundation=" + foundation + ", ranking=" + ranking
+        + ", coach=" + coach + "]";
   }
 }

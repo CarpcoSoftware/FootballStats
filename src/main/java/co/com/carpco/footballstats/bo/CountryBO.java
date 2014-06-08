@@ -52,8 +52,7 @@ public class CountryBO implements IBusinessObject<Country> {
    */
   @Override
   public void updateRecord(Country record) {
-    // TODO Auto-generated method stub
-
+    countryDAO.update(record);
   }
 
 }

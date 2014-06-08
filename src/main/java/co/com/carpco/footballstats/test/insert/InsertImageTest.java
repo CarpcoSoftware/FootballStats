@@ -32,9 +32,10 @@ public class InsertImageTest {
   public static void main(String[] args) {
     ServiceLocator.init();
     InsertImageTest imageTest = new InsertImageTest();
-    imageTest.insertCountry();
+    //imageTest.insertCountry();
     imageTest.insertTeam();
-    imageTest.insertTournament();
+    //imageTest.insertTournament();
+    //imageTest.updateCountry();
   }
   
   private void insertTournament() {
@@ -63,7 +64,7 @@ public class InsertImageTest {
     CountryBO countryBO = ServiceLocator.getBean(CountryBO.class);
 
     BufferedImage imBuff = null;
-    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/brazil.png");
+    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/mexico.png");
 
     try {
       imBuff = ImageIO.read(is);
@@ -72,7 +73,7 @@ public class InsertImageTest {
     }
 
     if (imBuff != null) {
-      Country country = new Country("brazil", imBuff, "portuguese");
+      Country country = new Country("mexico", imBuff, "spanish", "");
       countryBO.insertRecord(country);
     }
   }
@@ -82,7 +83,7 @@ public class InsertImageTest {
     CountryBO countryBO = ServiceLocator.getBean(CountryBO.class);
 
     BufferedImage imBuff = null;
-    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/brazil_cbf.png");
+    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/mexico_fmf.png");
 
     try {
       imBuff = ImageIO.read(is);
@@ -91,11 +92,28 @@ public class InsertImageTest {
     }
 
     if (imBuff != null) {
-      Country country = (Country) countryBO.findByIdentifier(6);
-      DateTime foundation = new DateTime(1914, 6, 8, 0, 0);
-      Team team = new Team("brazil", "Canarinha", imBuff, country, foundation);
+      Country country = (Country) countryBO.findByIdentifier(9);
+      Team team = new Team("mexico", "El tri", imBuff, country, 1929, 0, "");
       teamBO.insertRecord(team);
     }
   }
 
+  private void updateCountry() {
+    CountryBO countryBO = ServiceLocator.getBean(CountryBO.class);
+    
+    BufferedImage imBuff = null;
+    InputStream is = InsertImageTest.class.getResourceAsStream("/flags/croatia.png");
+
+    try {
+      imBuff = ImageIO.read(is);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    if (imBuff != null) {
+      Country country = countryBO.findByIdentifier(7);
+      country.setFlag(imBuff);
+      countryBO.updateRecord(country);
+    }
+  }
 }

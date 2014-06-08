@@ -13,7 +13,6 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -43,7 +42,7 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
   @Override
   public Set<Team> select() {
     StringBuilder sql = new StringBuilder();
-    sql.append("SELECT idteam, name, nickname, flag, idcountry, foundation ");
+    sql.append("SELECT idteam, name, nickname, flag, idcountry, foundation, ranking, coach ");
     sql.append("FROM team ");
 
     Set<Team> teamSet = new HashSet<>(jdbcTemplateObject.query(sql.toString(), new TeamMapper()));
@@ -70,16 +69,15 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
   public void insert(Team newRecord) {
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO team ");
-    sql.append("(name, nickname, flag, idcountry, foundation) ");
-    sql.append("VALUES (?, ?, ?, ?, ?)");
+    sql.append("(name, nickname, flag, idcountry, foundation, ranking, coach) ");
+    sql.append("VALUES (?, ?, ?, ?, ?, ?, ?)");
 
     Team team = newRecord;
     byte[] imageInByte = ImageUtil.encodeToByteArray((BufferedImage) team.getFlag());
 
-    java.sql.Timestamp sqlDate = new java.sql.Timestamp(team.getFoundation().getMillis());
-    
     jdbcTemplateObject.update(sql.toString(), new Object[] {team.getName(), team.getNickname(),
-        imageInByte, team.getCountry().getIdCountry(), sqlDate});
+        imageInByte, team.getCountry().getIdCountry(), team.getFoundation(), team.getRanking(),
+        team.getCoach()});
   }
 
   /*
@@ -101,7 +99,7 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
    */
   public Set<Team> selectByTournament(int idTournament) {
     StringBuilder sql = new StringBuilder();
-    sql.append("SELECT t.idteam, t.name, t.nickname, t.flag, t.idcountry, t.foundation ");
+    sql.append("SELECT t.idteam, t.name, t.nickname, t.flag, t.idcountry, t.foundation, t.ranking, t.coach ");
     sql.append("FROM team t ");
     sql.append("INNER JOIN tournament_team txt ON t.idteam = txt.idteam ");
     sql.append("WHERE txt.idtournament = ? ");
@@ -126,7 +124,9 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
       String nickname = rs.getString("nickname");
       InputStream is = rs.getBinaryStream("flag");
       int idCountry = rs.getInt("idcountry");
-      DateTime foundation = new DateTime(rs.getTimestamp("foundation"));
+      int foundation = rs.getInt("foundation");
+      int ranking = rs.getInt("ranking");
+      String coach = rs.getString("coach");
 
       BufferedImage flag = null;
       try {
@@ -137,7 +137,7 @@ public class TeamDAO extends AbstractDAO implements IDAO<Team> {
 
       Country country = countryDAO.selectByIdentifier(idCountry);
 
-      return new Team(identifier, name, nickname, flag, country, foundation);
+      return new Team(identifier, name, nickname, flag, country, foundation, ranking, coach);
     }
 
   }

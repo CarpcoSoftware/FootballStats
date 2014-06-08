@@ -46,7 +46,7 @@ public class CountryDAO extends AbstractDAO implements IDAO<Country> {
   @Override
   public Country selectByIdentifier(int identifier) {
     StringBuilder sql = new StringBuilder();
-    sql.append("SELECT idcountry, name, flag, language ");
+    sql.append("SELECT idcountry, name, flag, language, capital ");
     sql.append("FROM country ");
     sql.append("WHERE idcountry = ? ");
 
@@ -65,14 +65,14 @@ public class CountryDAO extends AbstractDAO implements IDAO<Country> {
   public void insert(Country newRecord) {
     StringBuilder sql = new StringBuilder();
     sql.append("INSERT INTO country ");
-    sql.append("(name, flag, language) ");
-    sql.append("VALUES (?, ?, ?)");
+    sql.append("(name, flag, language, capital) ");
+    sql.append("VALUES (?, ?, ?, ?)");
 
     Country country = newRecord;
     byte[] imageInByte = ImageUtil.encodeToByteArray((BufferedImage) country.getFlag());
 
     jdbcTemplateObject.update(sql.toString(),
-        new Object[] {country.getName(), imageInByte, country.getLanguage()});
+        new Object[] {country.getName(), imageInByte, country.getLanguage(), country.getCapital()});
   }
 
   /*
@@ -82,8 +82,16 @@ public class CountryDAO extends AbstractDAO implements IDAO<Country> {
    */
   @Override
   public void update(Country record) {
-    // TODO Auto-generated method stub
+    StringBuilder sql = new StringBuilder();
+    sql.append("UPDATE country ");
+    sql.append("SET name = ?, flag = ?, language = ?, capital = ? ");
+    sql.append("WHERE idCountry = ?");
 
+    Country country = record;
+    byte[] imageInByte = ImageUtil.encodeToByteArray((BufferedImage) country.getFlag());
+
+    jdbcTemplateObject.update(sql.toString(),
+        new Object[] {country.getName(), imageInByte, country.getLanguage(), country.getCapital(), country.getIdCountry()});
   }
 
   private class CountryMapper implements RowMapper<Country> {
@@ -99,6 +107,7 @@ public class CountryDAO extends AbstractDAO implements IDAO<Country> {
       String name = rs.getString("name");
       InputStream is = rs.getBinaryStream("flag");
       String languange = rs.getString("language");
+      String capital = rs.getString("capital");
 
       BufferedImage flag = null;
       try {
@@ -107,7 +116,7 @@ public class CountryDAO extends AbstractDAO implements IDAO<Country> {
         e.printStackTrace();
       }
 
-      return new Country(identifier, name, flag, languange);
+      return new Country(identifier, name, flag, languange, capital);
     }
 
   }

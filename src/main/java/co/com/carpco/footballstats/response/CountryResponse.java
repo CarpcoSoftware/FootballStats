@@ -22,12 +22,26 @@ import co.com.carpco.footballstats.util.ImageUtil;
  */
 public class CountryResponse extends AbstractResponse {
 
+  private static final String ROOT_ELEMENT = "Countries";
+
+  private static final String ENTRY_ELEMENT = "Country";
+
+  private static final String ATTRIBUTE_ID = "id";
+
+  private static final String ATTRIBUTE_NAME = "name";
+
+  private static final String ATTRIBUTE_LANGUAGE = "language";
+
+  private static final String ATTRIBUTE_FLAG = "flag";
+  
+  private static final String ATTRIBUTE_CAPITAL = "capital";
+
   public CountryResponse() {
     super();
   }
 
   public String teamsToXML(Set<Object> countrySet) throws TransformerException {
-    doc.setRootElement(new Element("Countries"));
+    doc.setRootElement(new Element(ROOT_ELEMENT));
 
     for (Object object : countrySet) {
       doc.getRootElement().addContent(buildElement(object));
@@ -39,12 +53,13 @@ public class CountryResponse extends AbstractResponse {
   @Override
   public Element buildElement(Object object) {
     Country country = (Country) object;
-    Element element = new Element("Country");
-    element.addContent(new Element("id").setText(String.valueOf(country.getIdCountry())));
-    element.addContent(new Element("name").setText(country.getName()));
-    element.addContent(new Element("flag").setText(ImageUtil.encodeToString((BufferedImage) country
-        .getFlag())));
-    element.addContent(new Element("language").setText(country.getLanguage()));
+    Element element = new Element(ENTRY_ELEMENT);
+    element.addContent(new Element(ATTRIBUTE_ID).setText(String.valueOf(country.getIdCountry())));
+    element.addContent(new Element(ATTRIBUTE_NAME).setText(country.getName()));
+    element.addContent(new Element(ATTRIBUTE_LANGUAGE).setText(country.getLanguage()));
+    element.addContent(new Element(ATTRIBUTE_CAPITAL).setText(country.getCapital()));
+    element.addContent(new Element(ATTRIBUTE_FLAG).setText(ImageUtil
+        .encodeToString((BufferedImage) country.getFlag())));
     return element;
   }
 
